@@ -32,7 +32,7 @@ const createTask = async (req, res) => {
     const newTask = await TASK.create({
       title,
       description,
-      status,
+      tag,
     });
     const totalTasks = await TASK.countDocuments({});
 
