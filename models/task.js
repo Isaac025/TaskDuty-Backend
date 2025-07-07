@@ -11,7 +11,7 @@ const taskSchema = new Schema(
       type: String,
       required: true,
     },
-    status: {
+    tag: {
       type: String,
       enum: ["urgent", "important"],
       required: true,

@@ -21,8 +21,8 @@ const getAllTasks = async (req, res) => {
 };
 
 const createTask = async (req, res) => {
-  const { title, description, status } = req.body;
-  if (!title || !description || !status) {
+  const { title, description, tag } = req.body;
+  if (!title || !description || !tag) {
     return res.status(400).json({
       success: false,
       message: "Please fill all the fields",
@@ -53,8 +53,8 @@ const createTask = async (req, res) => {
 
 const editTask = async (req, res) => {
   const { id } = req.params;
-  const { title, description, status } = req.body;
-  if (!title || !description || !status) {
+  const { title, description, tag } = req.body;
+  if (!title || !description || !tag) {
     return res.status(400).json({
       success: false,
       message: "Please fill all the fields",
@@ -74,7 +74,7 @@ const editTask = async (req, res) => {
       {
         title,
         description,
-        status,
+        tag,
       },
       { new: true }
     );
@@ -95,18 +95,29 @@ const editTask = async (req, res) => {
 
 const deleteTask = async (req, res) => {
   const { id } = req.params;
+
+  // Validate ID format (if using MongoDB)
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({
+      success: false,
+      message: "Invalid task ID format",
+    });
+  }
+
   try {
-    const task = await TASK.findById(id);
+    const task = await TASK.findByIdAndDelete(id);
+
     if (!task) {
       return res.status(404).json({
         success: false,
         message: "Task not found",
       });
     }
-    await TASK.findByIdAndDelete(id);
+
     res.status(200).json({
       success: true,
       message: "Task deleted successfully",
+      deletedTask: task,
     });
   } catch (error) {
     console.error(error);
