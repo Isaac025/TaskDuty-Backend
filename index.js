@@ -1,16 +1,17 @@
+require("dotenv").config();
 const express = require("express");
 const app = express();
 const PORT = process.env.PORT || 3000;
 const cors = require("cors");
-require("dotenv").config();
 const mongoose = require("mongoose");
 const taskRouter = require("./Routes/taskRouter");
+const userRouter = require("./Routes/userRouter");
 
 //middleware
 app.use(express.json());
 app.use(cors());
 app.use("/api/task", taskRouter);
-
+app.use("/api/user", userRouter);
 //routes
 app.get("/", (req, res) => {
   res.status(200).json({ success: true, message: "Task Duty Api Running" });
