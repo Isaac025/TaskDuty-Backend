@@ -99,4 +99,24 @@ const handleLogin = async (req, res) => {
   }
 };
 
-module.exports = { handleRegister, handleLogin };
+const getAllUsers = async (req, res) => {
+  const users = await USER.find({});
+  const totalUsers = await USER.countDocuments({});
+
+  try {
+    res.status(200).json({
+      success: true,
+      message: "users fetched successfullly",
+      totalUsers,
+      users,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+module.exports = { handleRegister, handleLogin, getAllUsers };
