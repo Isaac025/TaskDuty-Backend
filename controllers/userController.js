@@ -84,7 +84,7 @@ const handleLogin = async (req, res) => {
     const token = jwt.sign(
       { userId: user._id, email: user.email },
       process.env.JWT_SECRET,
-      { expiresIn: "3 days" }
+      { expiresIn: "3d" }
     );
 
     res.status(200).json({
