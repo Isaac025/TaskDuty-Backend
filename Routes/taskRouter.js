@@ -6,12 +6,14 @@ const {
   getSingleTask,
 } = require("../controllers/taskcontroller");
 
+const { isLoggedIn } = require("../middleware/auth");
+
 const router = require("express").Router();
 
-router.get("/", getAllTasks);
-router.get("/:id", getSingleTask);
-router.post("/new-task", createTask);
-router.patch("/:id", editTask);
-router.delete("/:id", deleteTask);
+router.get("/", isLoggedIn, getAllTasks);
+router.get("/:id", isLoggedIn, getSingleTask);
+router.post("/new-task", isLoggedIn, createTask);
+router.patch("/:id", isLoggedIn, editTask);
+router.delete("/:id", isLoggedIn, deleteTask);
 
 module.exports = router;
