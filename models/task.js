@@ -11,6 +11,12 @@ const taskSchema = new Schema(
       type: String,
       required: true,
     },
+    // 👇 associate each task with a user
+    user: {
+      type: mongoose.Types.Schema.ObjectId,
+      ref: "user",
+      required: true,
+    },
     tag: {
       type: String,
       enum: ["urgent", "important"],
