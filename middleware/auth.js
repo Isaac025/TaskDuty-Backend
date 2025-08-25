@@ -18,7 +18,6 @@ const isLoggedIn = async (req, res, next) => {
     }
     req.user = {
       email: payload.email,
-      role: payload.role,
       userId: payload.userId,
     };
     next();

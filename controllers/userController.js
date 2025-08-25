@@ -82,9 +82,9 @@ const handleLogin = async (req, res) => {
     }
 
     const token = jwt.sign(
-      { userId: user._id, email: user.email },
+      { email: user.email, userId: user._id },
       process.env.JWT_SECRET,
-      { expiresIn: "3d" }
+      { expiresIn: "3 days" }
     );
 
     res.status(200).json({
