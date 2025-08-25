@@ -23,7 +23,7 @@ const sendMail = async ({ to, subject, html }) => {
 };
 
 const sendWelcomeEmail = ({ fullName, clientUrl, email }) => {
-  const subject = "Welcome to Torii Gates";
+  const subject = "Welcome to Task Duty";
   const html = createWelcomeTemplates(fullName, clientUrl);
   sendMail({ to: email, subject, html });
 };
