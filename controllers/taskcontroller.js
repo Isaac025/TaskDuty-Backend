@@ -2,7 +2,7 @@ const TASK = require("../models/task");
 const mongoose = require("mongoose");
 
 const getAllTasks = async (req, res) => {
-  const tasks = await TASK.find({});
+  const tasks = await TASK.find({}).sort({ createdAt: -1 });
   const totalTasks = await TASK.countDocuments({});
 
   try {
