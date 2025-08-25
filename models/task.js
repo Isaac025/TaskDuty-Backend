@@ -13,7 +13,7 @@ const taskSchema = new Schema(
     },
     // 👇 associate each task with a user
     user: {
-      type: mongoose.Types.Schema.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "user",
       required: true,
     },
