@@ -24,8 +24,11 @@ const getAllTasks = async (req, res) => {
 
 const getSingleTask = async (req, res) => {
   const { id } = req.params;
+  const userId = req.user.userId;
+
   try {
-    const task = await TASK.findById(id);
+    const task = await TASK.findOne({ _id: id, user: userId });
+
     if (!task) {
       return res.status(404).json({
         success: false,
@@ -47,6 +50,8 @@ const getSingleTask = async (req, res) => {
 
 const createTask = async (req, res) => {
   const { title, description, tag } = req.body;
+  const userId = req.user.userId;
+
   if (!title || !description || !tag) {
     return res.status(400).json({
       success: false,
@@ -58,8 +63,9 @@ const createTask = async (req, res) => {
       title,
       description,
       tag,
+      user: userId,
     });
-    const totalTasks = await TASK.countDocuments({});
+    const totalTasks = await TASK.countDocuments({ user: userId });
 
     res.status(201).json({
       success: true,
@@ -79,6 +85,8 @@ const createTask = async (req, res) => {
 const editTask = async (req, res) => {
   const { id } = req.params;
   const { title, description, tag } = req.body;
+  const userId = req.user.userId;
+
   if (!title || !description || !tag) {
     return res.status(400).json({
       success: false,
@@ -87,7 +95,12 @@ const editTask = async (req, res) => {
   }
 
   try {
-    const task = await TASK.findById(id);
+    const task = await TASK.findOneAndUpdate(
+      { _id: id, user: userId },
+      { title, description, tag },
+      { new: true }
+    );
+
     if (!task) {
       return res.status(404).json({
         success: false,
@@ -107,7 +120,7 @@ const editTask = async (req, res) => {
     res.status(200).json({
       success: true,
       message: "Task updated successfully",
-      task: updatedTask,
+      task,
     });
   } catch (error) {
     console.error(error);
@@ -120,6 +133,7 @@ const editTask = async (req, res) => {
 
 const deleteTask = async (req, res) => {
   const { id } = req.params;
+  const userId = req.user.userId;
 
   // Validate ID format (if using MongoDB)
   if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -130,12 +144,12 @@ const deleteTask = async (req, res) => {
   }
 
   try {
-    const task = await TASK.findByIdAndDelete(id);
+    const task = await TASK.findOneAndDelete({ _id: id, user: userId });
 
     if (!task) {
       return res.status(404).json({
         success: false,
-        message: "Task not found",
+        message: "Task not found or unauthorized",
       });
     }
 
